@@ -1,0 +1,5 @@
+# 本地工具链缓存（不属于游戏项目）
+.workbuddy/
+node_modules/
+*.log
+.DS_Store

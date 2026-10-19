@@ -1,0 +1,249 @@
+/* =========================================================
+ * 飞机大战 · 样式表
+ * 深空霓虹主题；#stage 保持 3:5 竖屏比例并自适应窗口
+ * ========================================================= */
+
+* { margin: 0; padding: 0; box-sizing: border-box; }
+
+html, body { height: 100%; }
+
+body {
+  background: #02040a radial-gradient(ellipse at 50% -20%, #16204a 0%, #02040a 62%);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-family: "Segoe UI", "Microsoft YaHei", "PingFang SC", system-ui, sans-serif;
+  color: #e0f2fe;
+  overflow: hidden;
+  user-select: none;
+  -webkit-user-select: none;
+  -webkit-tap-highlight-color: transparent;
+}
+
+/* ---------- 舞台：固定 480x800 逻辑分辨率，等比缩放 ---------- */
+#stage {
+  position: relative;
+  aspect-ratio: 3 / 5;
+  height: min(100vh, 166.6667vw);
+  box-shadow:
+    0 0 60px rgba(56, 189, 248, 0.22),
+    0 0 140px rgba(124, 58, 237, 0.14);
+  border: 1px solid rgba(125, 249, 255, 0.16);
+  border-radius: 10px;
+  overflow: hidden;
+}
+
+#game-canvas {
+  display: block;
+  width: 100%;
+  height: 100%;
+  touch-action: none;   /* 触摸拖拽时不滚动页面 */
+  cursor: crosshair;
+}
+
+/* ---------- 顶部工具条 ---------- */
+#topbar {
+  position: absolute;
+  top: 8px;
+  left: 50%;
+  transform: translateX(-50%);
+  display: flex;
+  gap: 8px;
+  z-index: 5;
+}
+
+.tbtn {
+  font-family: inherit;
+  font-size: 11px;
+  color: #bcd7ff;
+  background: rgba(8, 15, 40, 0.72);
+  border: 1px solid rgba(125, 249, 255, 0.25);
+  border-radius: 6px;
+  padding: 4px 9px;
+  cursor: pointer;
+  transition: background 0.15s ease, color 0.15s ease;
+}
+
+.tbtn:hover { background: rgba(56, 189, 248, 0.22); color: #e0f2fe; }
+
+/* ---------- 全屏覆盖层（菜单 / 暂停 / 升级 / 结算） ---------- */
+.overlay {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: rgba(2, 6, 20, 0.80);
+  backdrop-filter: blur(4px);
+  -webkit-backdrop-filter: blur(4px);
+  z-index: 10;
+  padding: 20px;
+  animation: fadeIn 0.25s ease;
+}
+
+.overlay.hidden { display: none; }
+
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to   { opacity: 1; }
+}
+
+.panel { text-align: center; width: 100%; max-width: 330px; }
+
+.title {
+  font-size: 42px;
+  letter-spacing: 8px;
+  font-weight: 800;
+  background: linear-gradient(180deg, #ffffff 0%, #7dd3fc 55%, #3b82f6 100%);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+  filter: drop-shadow(0 0 16px rgba(56, 189, 248, 0.45));
+}
+
+.subtitle {
+  color: #8fb7ff;
+  letter-spacing: 5px;
+  font-size: 12px;
+  margin: 8px 0 22px;
+}
+
+.title2 {
+  font-size: 25px;
+  letter-spacing: 6px;
+  margin-bottom: 18px;
+  color: #e0f2fe;
+  filter: drop-shadow(0 0 10px rgba(56, 189, 248, 0.35));
+}
+
+.title2.over { color: #ff8fa3; filter: drop-shadow(0 0 10px rgba(255, 90, 110, 0.4)); }
+
+.desc {
+  background: rgba(13, 25, 60, 0.60);
+  border: 1px solid rgba(125, 249, 255, 0.15);
+  border-radius: 12px;
+  padding: 13px 12px;
+  margin-bottom: 16px;
+}
+
+.desc p { font-size: 12.5px; color: #bcd7ff; line-height: 1.95; }
+
+.best-line { font-size: 13px; color: #ffd24d; margin-bottom: 16px; letter-spacing: 1px; }
+
+.hint { font-size: 12px; color: #7f9cc9; margin-top: 14px; letter-spacing: 2px; }
+
+/* ---------- 按钮 ---------- */
+.big-btn {
+  display: block;
+  width: 100%;
+  padding: 13px 0;
+  margin-top: 10px;
+  font-family: inherit;
+  font-size: 17px;
+  letter-spacing: 6px;
+  font-weight: 700;
+  color: #04121f;
+  background: linear-gradient(180deg, #8bf0ff, #38bdf8);
+  border: none;
+  border-radius: 10px;
+  cursor: pointer;
+  box-shadow: 0 4px 18px rgba(56, 189, 248, 0.45), inset 0 1px 0 rgba(255, 255, 255, 0.6);
+  transition: transform 0.12s ease, box-shadow 0.12s ease;
+}
+
+.big-btn:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 26px rgba(56, 189, 248, 0.6), inset 0 1px 0 rgba(255, 255, 255, 0.6);
+}
+
+.big-btn:active { transform: translateY(0); }
+
+.ghost-btn {
+  display: block;
+  width: 100%;
+  padding: 11px 0;
+  margin-top: 10px;
+  font-family: inherit;
+  font-size: 14px;
+  letter-spacing: 4px;
+  color: #9fd8ff;
+  background: transparent;
+  border: 1px solid rgba(125, 249, 255, 0.35);
+  border-radius: 10px;
+  cursor: pointer;
+  transition: background 0.15s ease;
+}
+
+.ghost-btn:hover { background: rgba(56, 189, 248, 0.14); }
+
+/* ---------- 结算数据 ---------- */
+.stats {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 10px;
+  margin-bottom: 20px;
+}
+
+.stats div {
+  background: rgba(13, 25, 60, 0.60);
+  border: 1px solid rgba(125, 249, 255, 0.12);
+  border-radius: 10px;
+  padding: 10px 6px;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.stats span { font-size: 12px; color: #8fb7ff; letter-spacing: 2px; }
+.stats b { font-size: 20px; color: #ffd24d; }
+
+/* ---------- 升级卡片 ---------- */
+#upgrade-cards { display: flex; flex-direction: column; gap: 10px; }
+
+.card {
+  position: relative;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  text-align: left;
+  padding: 12px 14px;
+  border-radius: 12px;
+  cursor: pointer;
+  font-family: inherit;
+  color: #e0f2fe;
+  background: rgba(13, 25, 60, 0.85);
+  border: 1px solid rgba(125, 249, 255, 0.25);
+  transition: transform 0.12s ease, border-color 0.12s ease, box-shadow 0.12s ease;
+}
+
+.card:hover {
+  transform: translateX(4px);
+  border-color: #7df9ff;
+  box-shadow: 0 0 16px rgba(56, 189, 248, 0.35);
+}
+
+.card-key {
+  position: absolute;
+  top: 6px;
+  right: 10px;
+  font-size: 11px;
+  color: #7f9cc9;
+  border: 1px solid rgba(125, 249, 255, 0.3);
+  border-radius: 4px;
+  padding: 0 5px;
+}
+
+.card-icon { font-size: 26px; width: 40px; text-align: center; flex: none; }
+.card-name { font-size: 15px; font-weight: 700; }
+.card-desc { font-size: 12px; color: #9fd0ff; margin-top: 2px; }
+
+.card-pips { display: flex; gap: 3px; margin-top: 6px; }
+
+.pip { width: 12px; height: 4px; border-radius: 2px; background: rgba(255, 255, 255, 0.15); }
+.pip.on { background: #7df9ff; box-shadow: 0 0 6px rgba(125, 249, 255, 0.7); }
+
+/* 稀有度配色 */
+.card.r-common { border-color: rgba(148, 163, 184, 0.45); }
+.card.r-rare   { border-color: rgba(56, 189, 248, 0.60); }
+.card.r-epic   { border-color: rgba(167, 139, 250, 0.75); box-shadow: 0 0 14px rgba(167, 139, 250, 0.20); }
+.card.r-epic:hover { box-shadow: 0 0 18px rgba(167, 139, 250, 0.45); }

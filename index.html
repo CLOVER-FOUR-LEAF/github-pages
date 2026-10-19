@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+<title>飞机大战 · Plane War</title>
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🚀</text></svg>" />
+<link rel="stylesheet" href="css/style.css" />
+</head>
+<body>
+<div id="stage">
+  <canvas id="game-canvas" width="480" height="800"></canvas>
+
+  <!-- 顶部工具条（游戏中可见） -->
+  <div id="topbar">
+    <button id="btn-pause" class="tbtn" type="button">⏸ 暂停</button>
+    <button id="btn-autofire" class="tbtn" type="button">🔥 自动开火：开</button>
+    <button id="btn-sound" class="tbtn" type="button">🔊 音效：开</button>
+  </div>
+
+  <!-- 开始界面 -->
+  <div id="menu" class="overlay">
+    <div class="panel">
+      <h1 class="title">飞 机 大 战</h1>
+      <p class="subtitle">PLANE WAR · 无尽模式</p>
+      <div class="desc">
+        <p>🖥️ 键盘 WASD / 方向键移动</p>
+        <p>🖱️ 鼠标移动追踪 · 按住左键开火</p>
+        <p>📱 触摸拖拽移动（自动开火）</p>
+        <p>⚡ 默认自动开火 · F 切换 · P 暂停 · M 静音</p>
+        <p>👾 每 5 波出现 Boss，击杀掉落强化道具</p>
+      </div>
+      <p class="best-line">历史最高分：<span id="best-menu">0</span></p>
+      <button id="btn-start" class="big-btn" type="button">开 始 游 戏</button>
+    </div>
+  </div>
+
+  <!-- 暂停界面 -->
+  <div id="pause" class="overlay hidden">
+    <div class="panel">
+      <h2 class="title2">已 暂 停</h2>
+      <button id="btn-resume" class="big-btn" type="button">继 续</button>
+      <button id="btn-restart-p" class="ghost-btn" type="button">重新开始</button>
+    </div>
+  </div>
+
+  <!-- 升级界面 -->
+  <div id="levelup" class="overlay hidden">
+    <div class="panel">
+      <h2 class="title2">⬆ 升级！选择一项强化</h2>
+      <div id="upgrade-cards"></div>
+      <p class="hint">按 1 / 2 / 3 快速选择</p>
+    </div>
+  </div>
+
+  <!-- 结束界面 -->
+  <div id="gameover" class="overlay hidden">
+    <div class="panel">
+      <h2 class="title2 over">游 戏 结 束</h2>
+      <div class="stats">
+        <div><span>本局得分</span><b id="final-score">0</b></div>
+        <div><span>历史最高</span><b id="final-best">0</b></div>
+        <div><span>到达波次</span><b id="final-wave">0</b></div>
+        <div><span>战机等级</span><b id="final-level">1</b></div>
+      </div>
+      <button id="btn-restart" class="big-btn" type="button">再 来 一 局</button>
+    </div>
+  </div>
+</div>
+
+<script src="js/utils.js"></script>
+<script src="js/config.js"></script>
+<script src="js/input.js"></script>
+<script src="js/background.js"></script>
+<script src="js/sound.js"></script>
+<script src="js/entities.js"></script>
+<script src="js/game.js"></script>
+<script>
+  /* 入口：所有脚本按序加载完成后启动游戏（无模块、无构建，file:// 直接可跑） */
+  (function () {
+    var canvas = document.getElementById('game-canvas');
+    window.game = new GW.Game(canvas);
+  })();
+</script>
+</body>
+</html>
